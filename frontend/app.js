@@ -4,7 +4,7 @@ const taskList = document.getElementById("task-list")
 
 const API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://127.0.0.1:8000/tasks"
-    : "https://tu-backend-en-render.onrender.com/tasks";
+    : "https://task-manager-app-m3is.onrender.com/";
 
 const themeToggle = document.getElementById("theme-toggle");
 const savedTheme = localStorage.getItem("theme");
