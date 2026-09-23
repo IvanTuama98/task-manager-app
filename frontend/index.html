@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador de tareas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="theme-toggle">🌙</button>
+    <main>
+        <h1>Administrador de tareas</h1>
+        <form id="task-form">
+            <input type="text" id="task-input" placeholder="¿Que hay que hacer?" required>
+            <button type="submit">Agregar</button>
+        </form>
+        <div class="filter-buttons">
+            <button class="btn-filter active" data-filter="all">Todas</button>
+            <button class="btn-filter" data-filter="pending">Pendientes</button>
+            <button class="btn-filter" data-filter="completed">Completadas</button>
+        </div>
+
+        <p id="task-counter">Pendientes: <span>0</span></p>
+        
+        <div>
+            <ul id="task-list"></ul>
+        </div>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>

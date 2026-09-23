@@ -1,0 +1,245 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f4f6f8;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+main {
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2d3748;
+}
+
+#task-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#task-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+#task-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 10px 20px;
+}
+
+#task-list {
+    list-style: none;
+}
+
+#task-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.completed .task-title{
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.btn-complete .btn-delete {
+    border: none;
+    padding: 5px 10px;
+}
+
+li button {
+    border: none;
+    background: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.btn-complete:hover {
+    background-color: #e2e8f0; 
+    color: #334155;
+}
+
+.btn-delete:hover {
+    background-color: #fee2e2; 
+    color: #dc2626;
+}
+
+.task-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.btn-filter {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.btn-filter.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+#theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+body.dark-mode {
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+
+body.dark-mode main {
+    background-color: #1e293b;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode h1 {
+    color: #f8fafc;
+}
+
+body.dark-mode #task-input {
+    background-color: #334155;
+    color: #ffffff;
+    border-color: #475569;
+}
+
+body.dark-mode #task-list li {
+    border-bottom-color: #334155;
+}
+
+body.dark-mode .btn-filter {
+    background-color: #334155;
+    color: #cbd5e1;
+    border-color: #475569;
+}
+
+body.dark-mode li button {
+    color: #cbd5e1;
+}
+
+body.dark-mode .btn-complete:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+
+body.dark-mode .btn-delete:hover {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+}
+
+body, main, #task-input, .btn-filter {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body.dark-mode #task-input::placeholder {
+    color: #94a3b8;
+}
+
+body.dark-mode .btn-filter.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+body.dark-mode #task-counter {
+    color: #94a3b8; 
+}
+
+body.dark-mode #task-counter span {
+    color: #38bdf8; 
+}
+
+#task-counter {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #64748b;        
+    margin-bottom: 15px;  
+    font-weight: 500;
+}
+
+
+#task-counter span {
+    font-weight: bold;
+    color: #007bff;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1; 
+        transform: translateY(0);
+        max-height: 100px;
+        margin-bottom: 0.5rem;
+    }
+    to {
+        opacity: 0; 
+        transform: translateY(-10px);
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+}
+
+.desaparecer {
+    animation: fadeOut 0.3s forwards !important;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.aparecer {
+    opacity: 0;
+    animation: fadeIn 0.3s ease-out forwards;
+}
