@@ -8,7 +8,7 @@ const API_URL = window.location.hostname === "localhost" || window.location.host
 
 const themeToggle = document.getElementById("theme-toggle");
 const savedTheme = localStorage.getItem("theme");
-let currentFilter = localStorage.getItem("activeFilter" || "all");
+let currentFilter = localStorage.getItem("activeFilter") || "all";
 let lastAddedTaskId = null;
 
 
@@ -83,7 +83,9 @@ filterButtons.forEach(btn => {
 async function toggleTask(id) {
     await fetch(`${API_URL}/${id}`, {
         method: "PATCH",
-        "Content-Type": "application/json"
+        headers: {
+            "Content-Type": "application/json"
+        }
     })
     getTasks();
 }
@@ -107,7 +109,7 @@ function enableEditMode(li, task) {
     buttonsDiv.querySelector(".btn-save").onclick = () => saveTaskEdit(task.id, input.value);
     input.onkeydown = (e) => {
         if (e.key === "Enter") saveTaskEdit(task.id, input.value);
-        if (e.key === "Escape") getTasks(); // Cancela con la tecla Esc
+        if (e.key === "Escape") getTasks();
     };
 
     buttonsDiv.querySelector(".btn-cancel").onclick = () => getTasks();
@@ -148,30 +150,93 @@ async function deleteTask(id, event) {
             }
         });
 
-    getTasks();
+        getTasks();
     }, 300)
 }
 
 taskForm.addEventListener("submit", async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const textoIngresado = taskInput.value.trim();
     if (!textoIngresado) return;
 
-    const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ title: textoIngresado })
-    });
-
-    const newTask = await response.json();
-    lastAddedTaskId = newTask.id;
+    const tempId = "temp-" + Date.now();
+    const tempTask = {
+        id: tempId,
+        title: textoIngresado,
+        completed: false
+    };
 
     taskInput.value = "";
-    getTasks();
+
+    addTemporaryTask(tempTask);
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ title: textoIngresado })
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al crear la tarea");
+        }
+
+        const newTask = await response.json();
+        lastAddedTaskId = newTask.id;
+
+        replaceTemporaryTask(tempId, newTask);
+
+    } catch (error) {
+        console.error("Error:", error);
+        removeTemporaryTask(tempId);
+        alert("No se pudo agregar la tarea. Intenta de nuevo.");
+    }
 });
+
+function addTemporaryTask(task) {
+    const li = document.createElement("li");
+    li.dataset.tempId = task.id;
+    li.classList.add("aparecer");
+
+    li.innerHTML = `
+        <span class="task-title">${task.title}</span>
+        <div class="task-buttons">
+            <button class="btn-complete" disabled>Completar</button>
+            <button class="btn-edit" disabled>Editar</button>
+            <button class="btn-delete" disabled>Eliminar</button>
+        </div>
+    `;
+
+    taskList.prepend(li);
+
+    const counter = document.getElementById("task-counter");
+    const current = parseInt(counter.textContent.replace(/\D/g, "")) || 0;
+    counter.textContent = `Pendientes: ${current + 1}`;
+}
+
+function replaceTemporaryTask(tempId, realTask) {
+    const tempLi = document.querySelector(`li[data-temp-id="${tempId}"]`);
+    if (tempLi) {
+        tempLi.remove();
+    }
+
+    getTasks();
+}
+
+function removeTemporaryTask(tempId) {
+    const tempLi = document.querySelector(`li[data-temp-id="${tempId}"]`);
+    if (tempLi) {
+        tempLi.remove();
+
+        const counter = document.getElementById("task-counter");
+        const current = parseInt(counter.textContent.replace(/\D/g, "")) || 0;
+        counter.textContent = `Pendientes: ${Math.max(0, current - 1)}`;
+    }
+}
+
 
 function updateFilterButtons() {
     filterButtons.forEach(btn => {
